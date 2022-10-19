@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Pokemon_예제
@@ -21,7 +21,7 @@ namespace Pokemon_예제
                 Console.Write("이름:");
                 Console.WriteLine(pokemons[i].name);
                 Console.Write("체력:");
-                Console.WriteLine(pokemons[i].hp);
+                Console.WriteLine(pokemons[i].curHp + "/" + pokemons[i].maxHp);
                 Console.Write("공격력:");
                 Console.WriteLine(pokemons[i].atk);
             }
@@ -42,17 +42,18 @@ namespace Pokemon_예제
     class Pokemon
     {
         public int atk;
-        public int hp;
+        public int curHp;
+        public int maxHp;
         public string name;
 
         public void Attack(Pokemon target)
         {
-            target.hp = target.hp - this.atk;
+            target.curHp = target.curHp - this.atk;
         }
 
         public bool Death()
         {
-            if (hp > 0)
+            if (curHp > 0)
                 return false;
             else
                 return true;
@@ -63,15 +64,21 @@ namespace Pokemon_예제
             Console.WriteLine("##### " + msg + " #######");
             Console.WriteLine("Name:" + name);
             Console.WriteLine("Demage:" + atk);
-            Console.WriteLine("HP:" + hp);
+            Console.WriteLine("HP:" + curHp + "/" +maxHp);
             Console.WriteLine("###################");
         }
 
-        public Pokemon(string _name, int _atk, int _hp)
+        public Pokemon(string _name, int _atk, int _maxHp)
         {
             name = _name;
-            hp = _hp;
+            maxHp = _maxHp;
+            curHp = _maxHp;
             atk = _atk;
+        }
+
+        public void Recovery()
+        {
+            curHp = maxHp;
         }
 
         public Pokemon()
@@ -81,13 +88,13 @@ namespace Pokemon_예제
     }
     class Pokemon예제
     {
-        static Trainner Player = new Trainner();
-        static Pokemon Monster = new Pokemon();
+        static Trainner player = new Trainner();
+        static Pokemon monster = new Pokemon();
         static void Main(string[] args)
         {
             StartMain();
             Console.WriteLine();
-            Player.PokemonCheck();
+            player.PokemonCheck();
             Console.WriteLine();
             Console.WriteLine("모험이 시작됐다!");
             Console.WriteLine();
@@ -105,15 +112,15 @@ namespace Pokemon_예제
             {
                 case "피카츄":
                     Console.WriteLine(strMain + "를 얻었다!");
-                    Player.Catch(new Pokemon(strMain, 10, 100));
+                    player.Catch(new Pokemon(strMain, 10, 100));
                     break;
                 case "파이리":
                     Console.WriteLine(strMain + "를 얻었다!");
-                    Player.Catch(new Pokemon(strMain, 10, 100));
+                    player.Catch(new Pokemon(strMain, 10, 100));
                     break;
                 case "꼬부기":
                     Console.WriteLine(strMain + "를 얻었다!");
-                    Player.Catch(new Pokemon(strMain, 10, 100));
+                    player.Catch(new Pokemon(strMain, 10, 100));
                     break;
                 default:
                     Console.WriteLine("잘못 선택하셨습니다.");
@@ -150,32 +157,32 @@ namespace Pokemon_예제
             Console.WriteLine();
             Console.WriteLine("숲에 도착했다.");
             Console.WriteLine();
-            List<Pokemon> Monster = new List<Pokemon>();
-            Monster.Add(new Pokemon("우츠보트", 10, 100));
-            Monster.Add(new Pokemon("피존", 10, 100));
+            List<Pokemon> monster = new List<Pokemon>();
+            monster.Add(new Pokemon("우츠보트", 10, 100));
+            monster.Add(new Pokemon("피존", 10, 100));
 
             Random aRandom = new Random();
             int a = aRandom.Next(0, 2);
             if (a == 0)
             {
                 Random bRandom = new Random();
-                int b = bRandom.Next(0, Monster.Count);
+                int b = bRandom.Next(0, monster.Count);
                 Console.WriteLine("야생 포켓몬이 나타났다!");
                 Console.WriteLine();
-                Pokemon sMonster = Monster[b];
-                sMonster.Display(sMonster.name);
+                Pokemon smonster = monster[b];
+                smonster.Display(smonster.name);
                 Console.WriteLine();
                 Console.WriteLine("배틀!");
                 Console.WriteLine();
                 Console.WriteLine("배틀에 내보낼 포켓몬을 선택해주세요.");
                 Console.WriteLine();
-                Player.PokemonCheck();
+                player.PokemonCheck();
                 Console.WriteLine();
                 int throwpokemon;
                 throwpokemon = int.Parse(Console.ReadLine());
                 Console.WriteLine(throwpokemon);
-                Pokemon myPokemon = Player.Throw(throwpokemon);
-                BattleMain(myPokemon, sMonster);
+                Pokemon myPokemon = player.Throw(throwpokemon);
+                BattleMain(myPokemon, smonster);
             }
             else
             {
@@ -189,20 +196,20 @@ namespace Pokemon_예제
             Console.WriteLine();
             Console.WriteLine("바다에 도착했다.");
             Console.WriteLine();
-            List<Pokemon> Monster = new List<Pokemon>();
-            Monster.Add(new Pokemon("잉어킹", 10, 100));
-            Monster.Add(new Pokemon("모래두지", 10, 100));
+            List<Pokemon> monster = new List<Pokemon>();
+            monster.Add(new Pokemon("잉어킹", 10, 100));
+            monster.Add(new Pokemon("모래두지", 10, 100));
 
             Random aRandom = new Random();
             int a = aRandom.Next(0, 2);
             if (a == 0)
             {
                 Random bRandom = new Random();
-                int b = bRandom.Next(0, Monster.Count);
+                int b = bRandom.Next(0, monster.Count);
                 Console.WriteLine("야생 포켓몬이 나타났다!");
                 Console.WriteLine();
-                Pokemon sMonster = Monster[b];
-                sMonster.Display(sMonster.name);
+                Pokemon smonster = monster[b];
+                smonster.Display(smonster.name);
                 Console.WriteLine();
                 Console.WriteLine("배틀!");
                 Console.WriteLine();
@@ -211,8 +218,8 @@ namespace Pokemon_예제
                 int throwpokemon;
                 throwpokemon = int.Parse(Console.ReadLine());
                 Console.WriteLine(throwpokemon);
-                Pokemon myPokemon = Player.Throw(throwpokemon);
-                BattleMain(myPokemon, sMonster);
+                Pokemon myPokemon = player.Throw(throwpokemon);
+                BattleMain(myPokemon, smonster);
             }
             else
             {
@@ -225,7 +232,7 @@ namespace Pokemon_예제
         {
             while (true)
             {
-                if(myPokemon.Death() == false)
+                if (myPokemon.Death() == false)
                 {
                     myPokemon.Attack(wildPokemon);
                     wildPokemon.Display(myPokemon.name + "의 공격!");
@@ -235,7 +242,7 @@ namespace Pokemon_예제
                     Console.WriteLine(wildPokemon.name + "Win!");
                     break;
                 }
-                if(wildPokemon.Death() == false)
+                if (wildPokemon.Death() == false)
                 {
                     wildPokemon.Attack(myPokemon);
                     myPokemon.Display(wildPokemon.name + "의 공격!");
@@ -243,6 +250,10 @@ namespace Pokemon_예제
                 else
                 {
                     Console.WriteLine(myPokemon.name + "Win!");
+                    myPokemon.Recovery();
+                    wildPokemon.Recovery();
+                    player.Catch(wildPokemon);
+                    StageChoose();
                     break;
                 }
             }
